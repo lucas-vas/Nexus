@@ -23,8 +23,8 @@ public static class DependencyInjection
     /// <exception cref="ArgumentNullException">Thrown when services or assembly is null.</exception>
     public static IServiceCollection AddNexus(this IServiceCollection services, Assembly assembly)
     {
-        ArgumentNullException.ThrowIfNull(services, nameof(services));
-        ArgumentNullException.ThrowIfNull(assembly, nameof(assembly));
+        if (services == null) throw new ArgumentNullException(nameof(services));
+        if (assembly == null) throw new ArgumentNullException(nameof(assembly));
 
         // Register the main Nexus implementation
         services.AddScoped<INexus, Nexus>();
@@ -57,8 +57,8 @@ public static class DependencyInjection
     /// <exception cref="ArgumentNullException">Thrown when services or assemblies is null.</exception>
     public static IServiceCollection AddNexus(this IServiceCollection services, params Assembly[] assemblies)
     {
-        ArgumentNullException.ThrowIfNull(services, nameof(services));
-        ArgumentNullException.ThrowIfNull(assemblies, nameof(assemblies));
+        if (services == null) throw new ArgumentNullException(nameof(services));
+        if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
 
         foreach (var assembly in assemblies)
         {
@@ -77,7 +77,7 @@ public static class DependencyInjection
     /// <exception cref="ArgumentNullException">Thrown when serviceProvider is null.</exception>
     public static void DebugRegisteredHandlers(this IServiceProvider serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(serviceProvider, nameof(serviceProvider));
+        if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
         Console.WriteLine("=== Registered Handlers ===");
         

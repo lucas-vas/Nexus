@@ -7,9 +7,19 @@ namespace Nexus;
 /// <summary>
 /// Main implementation of the Nexus mediator for handling requests and notifications.
 /// </summary>
-/// <param name="serviceProvider">The service provider for dependency injection.</param>
-public sealed class Nexus(IServiceProvider serviceProvider) : INexus
+public sealed class Nexus : INexus
 {
+    private readonly IServiceProvider _serviceProvider;
+
+    /// <summary>
+    /// Initializes a new instance of the Nexus class.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider for dependency injection.</param>
+    public Nexus(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+    }
+
     /// <summary>
     /// Sends a request and returns the response from the corresponding handler.
     /// </summary>
@@ -21,7 +31,7 @@ public sealed class Nexus(IServiceProvider serviceProvider) : INexus
     /// <exception cref="InvalidOperationException">Thrown when no handler is registered or handler execution fails.</exception>
     public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(request, nameof(request));
+        if (request == null) throw new ArgumentNullException(nameof(request));
         
         var requestType = request.GetType();
         var handlerType = typeof(IRequestHandler<,>).MakeGenericType(requestType, typeof(TResponse));
@@ -29,13 +39,13 @@ public sealed class Nexus(IServiceProvider serviceProvider) : INexus
         var handler = GetHandler(handlerType, requestType.Name);
         var handlerMethod = GetHandlerMethod(handlerType);
 
-        var behaviors = serviceProvider.GetServices<IPipelineBehavior<IRequest<TResponse>, TResponse>>().Reverse();
+        var behaviors = _serviceProvider.GetServices<IPipelineBehavior<IRequest<TResponse>, TResponse>>().Reverse();
 
         var handlerDelegate = new RequestHandlerDelegate<TResponse>(() => 
         {
             try
             {
-                var result = handlerMethod.Invoke(handler, [request, cancellationToken]);
+                var result = handlerMethod.Invoke(handler, new object[] { request, cancellationToken });
                 return result as Task<TResponse> ?? throw new InvalidOperationException($"Handler '{handlerType.Name}' returned null");
             }
             catch (Exception ex) when (ex is not InvalidOperationException)
@@ -62,7 +72,7 @@ public sealed class Nexus(IServiceProvider serviceProvider) : INexus
     /// <exception cref="InvalidOperationException">Thrown when no handler is registered or handler execution fails.</exception>
     public Task Send(IRequest request, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(request, nameof(request));
+        if (request == null) throw new ArgumentNullException(nameof(request));
         
         var requestType = request.GetType();
         var handlerType = typeof(IRequestHandler<>).MakeGenericType(requestType);
@@ -72,7 +82,7 @@ public sealed class Nexus(IServiceProvider serviceProvider) : INexus
 
         try
         {
-            var result = handlerMethod.Invoke(handler, [request, cancellationToken]);
+            var result = handlerMethod.Invoke(handler, new object[] { request, cancellationToken });
             return result as Task ?? Task.CompletedTask;
         }
         catch (Exception ex) when (ex is not InvalidOperationException)
@@ -92,9 +102,9 @@ public sealed class Nexus(IServiceProvider serviceProvider) : INexus
     public async Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
         where TNotification : INotification
     {
-        ArgumentNullException.ThrowIfNull(notification, nameof(notification));
+        if (notification == null) throw new ArgumentNullException(nameof(notification));
         
-        var notificationHandlers = serviceProvider.GetServices<INotificationHandler<TNotification>>();
+        var notificationHandlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
 
         if (!notificationHandlers.Any())
         {
@@ -127,7 +137,7 @@ public sealed class Nexus(IServiceProvider serviceProvider) : INexus
     /// <exception cref="InvalidOperationException">Thrown when no handler is registered.</exception>
     private object GetHandler(Type handlerType, string requestTypeName)
     {
-        var handler = serviceProvider.GetService(handlerType);
+        var handler = _serviceProvider.GetService(handlerType);
         if (handler == null)
         {
             throw new InvalidOperationException($"No handler registered for request type '{requestTypeName}'");
