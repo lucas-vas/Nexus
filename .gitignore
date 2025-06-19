@@ -1,0 +1,74 @@
+# Arquivos gerados pelo sistema operacional
+#################################
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Arquivos e pastas do Visual Studio
+#################################
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Arquivos e pastas de IDEs (Rider, VS Code)
+#################################
+.idea/
+.vscode/
+
+# Saídas de Build (compilação)
+#################################
+**/[Bb]in/
+**/[Oo]bj/
+**/[Pp]ublish/
+**/[Pp]ub/
+
+# Arquivos gerados pelo .NET
+#################################
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Pacotes NuGet
+# Descomente a linha abaixo se você NÃO quer versionar a pasta de pacotes (não recomendado com PackageReference)
+# **/packages/
+
+# Arquivos de Teste e Cobertura
+#################################
+**/TestResults/
+*.trx
+*.coverlet.json
+*.coverlet.xml
+*.opencover.xml
+coverage.cobertura.xml
+lcov.info
+
+# Arquivos de log e temporários
+#################################
+*.log
+*.tmp
+*.temp
+
+# Credenciais e segredos
+# (Embora devam estar em user-secrets, é uma boa prática garantir que não sejam versionados)
+#################################
+secrets.json
+appsettings.Development.json
+
+# Ferramentas .NET locais
+#################################
+.dotnet/
+tools/
+
+# Arquivos de dump e diagnóstico
+#################################
+*.pcap
+*.dmp
+*.etl
+
+# Cache do ReSharper
+#################################
+_ReSharper*/
+*.[Rr]e[Ss]harper
