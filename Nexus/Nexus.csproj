@@ -3,7 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>Nexus</PackageId>
+    <PackageId>NexusX</PackageId>
     <Version>1.0.0</Version>
     <Authors>lucas-vas</Authors>
     <Description>Library used to apply the CQRS pattern in your .NET project</Description>
