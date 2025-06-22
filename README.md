@@ -11,6 +11,7 @@ A .NET library for implementing the CQRS (Command Query Responsibility Segregati
 - ✅ **Thread-safe** - Safe for use in multi-threaded applications
 - ✅ **Performance optimized** - Optimized reflection and type caching
 - ✅ **Robust error handling** - Validations and well-defined exceptions
+- ✅ **Multi-target support** - .NET 6, 7 and 8
 
 ## 📦 Installation
 
@@ -192,6 +193,7 @@ The library includes several security validations:
 - ✅ Reflection exception handling
 - ✅ Public type validation
 - ✅ Error handling in notifications
+- ✅ Response validation
 
 ## 📄 License
 
@@ -199,7 +201,7 @@ MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please open an issue or pull request.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Support
 
