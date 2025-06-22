@@ -72,3 +72,7 @@ tools/
 #################################
 _ReSharper*/
 *.[Rr]e[Ss]harper
+
+# Documentação interna e análise de falhas
+#################################
+Docs/
